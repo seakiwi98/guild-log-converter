@@ -1150,3 +1150,64 @@ h1 span[aria-hidden="true"] {
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.28), rgba(139, 92, 246, 0.30));
     border-color: rgba(103, 232, 249, 0.72);
 }
+
+/* Expandable parsed events table */
+.table-expand-actions {
+    display: grid;
+    gap: var(--space-3, 12px);
+    margin-top: var(--space-4, 16px);
+}
+
+.table-expand-hint {
+    margin: 0;
+}
+
+.table-expand-button {
+    width: 100%;
+    justify-self: start;
+}
+
+@media (min-width: 760px) {
+    .table-expand-actions {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+
+    .table-expand-button {
+        width: auto;
+    }
+}
+
+/* Integrated parsed events expand button */
+.table-expand-row td {
+    padding: var(--space-4, 16px);
+    background:
+            linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 47, 73, 0.42)),
+            rgba(15, 23, 42, 0.82);
+    text-align: center;
+}
+
+.table-expand-inline {
+    display: grid;
+    gap: var(--space-3, 12px);
+    justify-items: center;
+    align-items: center;
+}
+
+.table-expand-hint {
+    margin: 0;
+    white-space: normal;
+}
+
+.table-expand-button {
+    width: auto;
+    min-width: min(100%, 260px);
+}
+
+@media (min-width: 760px) {
+    .table-expand-inline {
+        display: inline-grid;
+        grid-template-columns: auto auto;
+        gap: var(--space-4, 16px);
+    }
+}

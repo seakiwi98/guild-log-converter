@@ -1,4 +1,4 @@
-<section class="card" aria-labelledby="parsed-events-title">
+<section class="card parsed-events-card" aria-labelledby="parsed-events-title">
     <div class="section-heading">
         <h2 id="parsed-events-title">{{ text.sections.events|raw }}</h2>
         <p>{{ text.sections.events_hint }}</p>
@@ -17,9 +17,10 @@
                 <th scope="col">{{ text.table.points }}</th>
             </tr>
             </thead>
-            <tbody>
+
+            <tbody data-expandable-table data-initial-visible="10">
             {% for event in result.events %}
-                <tr>
+                <tr{% if loop.index > 10 %} class="is-extra-row" hidden{% endif %}>
                     <td>{{ loop.index|fmt }}</td>
                     <td>
                         <button type="button" class="link-button js-detail" data-detail-target="{{ detail_key('player', event.killer_guild, event.killer_name) }}" aria-label="{{ text.aria.show_killer }} {{ event.killer_name }}">
@@ -45,6 +46,31 @@
                 </tr>
             {% endfor %}
             </tbody>
+
+            {% if result.events|length > 10 %}
+                <tfoot>
+                <tr class="table-expand-row">
+                    <td colspan="6">
+                        <div class="table-expand-inline">
+                            <span class="muted-text table-expand-hint">
+                                Showing first 10 of {{ result.events|length|fmt }} parsed events.
+                            </span>
+
+                            <button
+                                type="button"
+                                class="primary-button table-expand-button"
+                                data-expand-table-button
+                                data-expand-label="Show all {{ result.events|length|fmt }} events"
+                                data-collapse-label="Show only first 10 events"
+                                aria-expanded="false"
+                            >
+                                Show all {{ result.events|length|fmt }} events
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            {% endif %}
         </table>
     </div>
 </section>

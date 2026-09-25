@@ -98,7 +98,72 @@
         }
     }
 
+    function getRowAnchor(card) {
+        var tableBody = card.querySelector('[data-expandable-table]');
+
+        if (!tableBody) {
+            return null;
+        }
+
+        var visibleLimit = parseInt(tableBody.getAttribute('data-initial-visible'), 10);
+
+        if (!visibleLimit || visibleLimit < 1) {
+            visibleLimit = 10;
+        }
+
+        return tableBody.querySelector('tr:nth-child(' + visibleLimit + ')');
+    }
+
+    function preserveAnchorPosition(anchor, callback) {
+        if (!anchor) {
+            callback();
+            return;
+        }
+
+        var beforeTop = anchor.getBoundingClientRect().top;
+
+        callback();
+
+        var afterTop = anchor.getBoundingClientRect().top;
+        var delta = afterTop - beforeTop;
+
+        if (delta !== 0) {
+            window.scrollBy(0, delta);
+        }
+    }
+
+    function setupExpandableTables() {
+        var buttons = document.querySelectorAll('[data-expand-table-button]');
+
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].onclick = function () {
+                var button = this;
+                var card = button.closest('.parsed-events-card');
+
+                if (!card) {
+                    return;
+                }
+
+                var rows = card.querySelectorAll('.is-extra-row');
+                var anchor = getRowAnchor(card);
+                var isExpanded = button.getAttribute('aria-expanded') === 'true';
+                var expandLabel = button.getAttribute('data-expand-label') || 'Show all events';
+                var collapseLabel = button.getAttribute('data-collapse-label') || 'Show fewer events';
+
+                preserveAnchorPosition(anchor, function () {
+                    for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                        rows[rowIndex].hidden = isExpanded;
+                    }
+
+                    button.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+                    button.textContent = isExpanded ? expandLabel : collapseLabel;
+                });
+            };
+        }
+    }
+
     setupDetails();
     setupCopyButtons();
     setupLocalTimes();
+    setupExpandableTables();
 })();
