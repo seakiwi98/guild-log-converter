@@ -1,0 +1,22 @@
+<section class="share-card" aria-labelledby="share-title">
+    <div>
+        <p class="eyebrow">{{ text.share.eyebrow|raw }}</p>
+        <h2 id="share-title">{{ text.share.title|raw }}</h2>
+        <p class="muted-text">{{ text.share.description }}</p>
+    </div>
+
+    <div class="share-actions">
+        <input
+            type="text"
+            class="share-input"
+            id="share-url"
+            value="{{ shareUrl }}"
+            readonly
+            aria-label="{{ text.share.input_aria }}"
+        >
+
+        <button type="button" class="primary-button share-copy-button" data-copy-target="share-url">
+            {{ text.share.copy_button|raw }}
+        </button>
+    </div>
+</section>

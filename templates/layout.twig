@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ text.app.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/style.css" rel="stylesheet">
+</head>
+<body>
+<a href="#main-content" class="skip-link">{{ text.app.skip_link }}</a>
+
+<div class="page">
+    <header class="hero" role="banner">
+        <div class="hero-content">
+            <p class="eyebrow">{{ text.app.eyebrow|raw }}</p>
+
+            {% if isSharedResult %}
+                <h1>{{ text.hero.shared_title|raw }}</h1>
+                <p class="subtle">{{ text.hero.shared_description }}</p>
+            {% else %}
+                <h1>{{ text.hero.upload_title|raw }}</h1>
+                <p class="subtle">{{ text.hero.upload_description }}</p>
+            {% endif %}
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        {% if not isSharedResult %}
+            {% include 'partials/upload-form.twig' %}
+        {% endif %}
+
+        {% if error %}
+            {% include 'partials/error.twig' %}
+        {% endif %}
+
+        {% if result %}
+            {% if shareUrl %}
+                {% include 'partials/share-box.twig' %}
+            {% endif %}
+
+            {% include 'partials/summary.twig' %}
+            {% include 'partials/hidden-details.twig' %}
+            {% include 'partials/modal.twig' %}
+
+            {% include 'sections/player-overview.twig' %}
+            {% include 'sections/guild-overview.twig' %}
+            {% include 'sections/guild-matchups.twig' %}
+            {% include 'sections/parsed-events.twig' %}
+        {% endif %}
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.uiText = {
+        copied: "{{ text.js.copied|e('js') }}",
+        selectAndCopy: "{{ text.js.select_and_copy|e('js') }}"
+    };
+</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

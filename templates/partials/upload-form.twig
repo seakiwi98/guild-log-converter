@@ -1,0 +1,32 @@
+<section class="upload-card" aria-labelledby="upload-title">
+    <form method="post" enctype="multipart/form-data" class="upload-form" aria-describedby="upload-description">
+        <div class="upload-copy">
+            <span class="upload-icon" aria-hidden="true">{{ text.upload.icon|raw }}</span>
+
+            <div>
+                <h2 id="upload-title">{{ text.upload.title|raw }}</h2>
+                <p id="upload-description">{{ text.upload.description }}</p>
+            </div>
+        </div>
+
+        <div class="file-field">
+            <label for="logfile" class="file-drop">
+                <span class="file-drop-title">{{ text.upload.file_title|raw }}</span>
+                <span class="file-drop-subtitle" id="logfile-help">{{ text.upload.file_help }}</span>
+
+                <input
+                    type="file"
+                    name="logfile"
+                    id="logfile"
+                    accept=".txt,text/plain"
+                    aria-describedby="logfile-help"
+                    required
+                >
+            </label>
+        </div>
+
+        <button type="submit" class="primary-button" aria-label="{{ text.upload.button_aria }}">
+            {{ text.upload.button|raw }}
+        </button>
+    </form>
+</section>

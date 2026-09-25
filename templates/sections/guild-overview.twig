@@ -1,0 +1,38 @@
+<section class="card" aria-labelledby="guild-overview-title">
+    <div class="section-heading">
+        <h2 id="guild-overview-title">{{ text.sections.guilds|raw }}</h2>
+        <p>{{ text.sections.guilds_hint }}</p>
+    </div>
+
+    <div class="table-wrap" tabindex="0" aria-label="{{ text.aria.guild_table }}">
+        <table>
+            <caption class="visually-hidden">{{ text.captions.guild_table }}</caption>
+            <thead>
+            <tr>
+                <th scope="col">{{ text.table.guild }}</th>
+                <th scope="col">{{ text.table.kills }}</th>
+                <th scope="col">{{ text.table.deaths }}</th>
+                <th scope="col">{{ text.table.kd }}</th>
+                <th scope="col">{{ text.table.points }}</th>
+                <th scope="col">{{ text.table.unique_players }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for guild in result.guilds %}
+                <tr>
+                    <td>
+                        <button type="button" class="badge badge-button js-detail" data-detail-target="{{ guild_detail_key(guild.name) }}" aria-label="{{ text.aria.show_guild }} {{ guild.name }}">
+                            &#x1F6E1;&#xFE0F; {{ guild.name }}
+                        </button>
+                    </td>
+                    <td>{{ guild.kills|fmt }}</td>
+                    <td>{{ guild.deaths|fmt }}</td>
+                    <td>{{ guild.kd_ratio }}</td>
+                    <td><strong>{{ guild.points|fmt }}</strong></td>
+                    <td>{{ guild.unique_players|fmt }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>

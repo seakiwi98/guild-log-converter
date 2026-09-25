@@ -1,0 +1,19 @@
+<div class="modal fade stats-modal" id="statsModal" tabindex="-1" aria-labelledby="statsModalTitle" aria-describedby="statsModalDescription" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">{{ text.modal.eyebrow|raw }}</p>
+                    <h2 class="modal-title" id="statsModalTitle">{{ text.modal.title }}</h2>
+                    <p class="visually-hidden" id="statsModalDescription">
+                        {{ text.modal.description }}
+                    </p>
+                </div>
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{{ text.modal.close }}"></button>
+            </div>
+
+            <div class="modal-body" id="statsModalBody"></div>
+        </div>
+    </div>
+</div>

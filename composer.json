@@ -1,0 +1,16 @@
+{
+  "name": "local/guild-log-overview",
+  "description": "Simple PHP guild log upload and statistics overview",
+  "type": "project",
+  "require": {
+    "twig/twig": "^3.30"
+  },
+  "autoload": {
+    "psr-4": {
+      "LogConv\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  }
+}

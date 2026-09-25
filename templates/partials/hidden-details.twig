@@ -1,0 +1,147 @@
+<div class="hidden-details" id="hidden-details">
+    {% for detailKey, detail in playerDetails %}
+        {% set player = detail.player %}
+
+        <article class="detail-card" data-detail-id="{{ detailKey }}">
+            <div class="detail-header">
+                <div>
+                    <p class="eyebrow">{{ text.details.player_eyebrow }}</p>
+                    <h2>{{ player.name }}</h2>
+                    <p><span class="badge">{{ player.guild }}</span></p>
+                </div>
+
+                <div class="detail-score">
+                    <span>{{ text.details.points }}</span>
+                    <strong>{{ player.points|fmt }}</strong>
+                </div>
+            </div>
+
+            <div class="mini-stats">
+                <div><span>{{ text.details.kills }}</span><strong>{{ player.kills|fmt }}</strong></div>
+                <div><span>{{ text.details.deaths }}</span><strong>{{ player.deaths|fmt }}</strong></div>
+                <div><span>{{ text.details.kd }}</span><strong>{{ player.kd_ratio }}</strong></div>
+                <div><span>{{ text.details.points }}</span><strong>{{ player.points|fmt }}</strong></div>
+            </div>
+
+            <div class="detail-columns">
+                <div>
+                    <h3>{{ text.details.killed_opponents }}</h3>
+
+                    {% if detail.kills_against|length > 0 %}
+                        <ul class="detail-list">
+                            {% for opponent in detail.kills_against %}
+                                <li>
+                                    <span>{{ opponent.name }} <em>{{ opponent.guild }}</em></span>
+                                    <strong>{{ opponent.count|fmt }}</strong>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted-text">{{ text.details.no_kills }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <h3>{{ text.details.killed_by }}</h3>
+
+                    {% if detail.deaths_from|length > 0 %}
+                        <ul class="detail-list">
+                            {% for opponent in detail.deaths_from %}
+                                <li>
+                                    <span>{{ opponent.name }} <em>{{ opponent.guild }}</em></span>
+                                    <strong>{{ opponent.count|fmt }}</strong>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted-text">{{ text.details.no_deaths }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3>{{ text.details.player_history }}</h3>
+            <ul class="event-list">
+                {% for event in detail.events %}
+                    <li>
+                        <span>
+                            <strong>{{ event.killer_name }}</strong>
+                            <em>{{ event.killer_guild }}</em>
+                            {{ text.details.killed_word }}
+                            <strong>{{ event.victim_name }}</strong>
+                            <em>{{ event.victim_guild }}</em>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {% endfor %}
+
+    {% for detailKey, detail in guildDetails %}
+        {% set guild = detail.guild %}
+
+        <article class="detail-card" data-detail-id="{{ detailKey }}">
+            <div class="detail-header">
+                <div>
+                    <p class="eyebrow">{{ text.details.guild_eyebrow }}</p>
+                    <h2>{{ guild.name }}</h2>
+                    <p>{{ guild.unique_players|fmt }} {{ text.details.players_seen_suffix }}</p>
+                </div>
+
+                <div class="detail-score">
+                    <span>{{ text.details.points }}</span>
+                    <strong>{{ guild.points|fmt }}</strong>
+                </div>
+            </div>
+
+            <div class="mini-stats">
+                <div><span>{{ text.details.kills }}</span><strong>{{ guild.kills|fmt }}</strong></div>
+                <div><span>{{ text.details.deaths }}</span><strong>{{ guild.deaths|fmt }}</strong></div>
+                <div><span>{{ text.details.kd }}</span><strong>{{ guild.kd_ratio }}</strong></div>
+                <div><span>{{ text.details.points }}</span><strong>{{ guild.points|fmt }}</strong></div>
+            </div>
+
+            <div class="detail-columns">
+                <div>
+                    <h3>{{ text.details.members_seen }}</h3>
+                    <div class="pill-list">
+                        {% for memberName, unused in detail.members %}
+                            <span>{{ memberName }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <h3>{{ text.details.matchups }}</h3>
+
+                    {% if detail.matchups|length > 0 %}
+                        <ul class="detail-list">
+                            {% for matchup in detail.matchups %}
+                                <li>
+                                    <span>{{ text.details.versus }} {{ matchup.guild }}</span>
+                                    <strong>{{ matchup.kills|fmt }}K / {{ matchup.deaths|fmt }}D</strong>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted-text">{{ text.details.no_matchups }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3>{{ text.details.guild_history }}</h3>
+            <ul class="event-list">
+                {% for event in detail.events %}
+                    <li>
+                        <span>
+                            <strong>{{ event.killer_name }}</strong>
+                            <em>{{ event.killer_guild }}</em>
+                            {{ text.details.killed_word }}
+                            <strong>{{ event.victim_name }}</strong>
+                            <em>{{ event.victim_guild }}</em>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {% endfor %}
+</div>

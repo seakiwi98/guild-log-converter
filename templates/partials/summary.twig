@@ -1,0 +1,21 @@
+<section class="summary-grid" aria-label="{{ text.summary.aria }}">
+    <div class="summary-card">
+        <span>{{ text.summary.events|raw }}</span>
+        <strong>{{ result.totals.events|fmt }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <span>{{ text.summary.players|raw }}</span>
+        <strong>{{ result.totals.players|fmt }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <span>{{ text.summary.guilds|raw }}</span>
+        <strong>{{ result.totals.guilds|fmt }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <span>{{ text.summary.file|raw }}</span>
+        <strong>{{ fileName }}</strong>
+    </div>
+</section>
