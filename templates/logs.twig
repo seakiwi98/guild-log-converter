@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ text.app.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/style.css" rel="stylesheet">
+</head>
+<body>
+<a href="#main-content" class="skip-link">{{ text.app.skip_link }}</a>
+
+<div class="page">
+    {% include 'partials/navigation.twig' %}
+
+    <header class="hero" role="banner">
+        <div class="hero-content">
+            <p class="eyebrow">{{ text.app.eyebrow|raw }}</p>
+            <h1>{{ text.hero.logs_title|raw }}</h1>
+            <p class="subtle">{{ text.hero.logs_description }}</p>
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        <section class="card" aria-labelledby="logs-title">
+            <div class="section-heading">
+                <h2 id="logs-title">{{ text.logs.title|raw }}</h2>
+                <p>{{ text.logs.description }}</p>
+            </div>
+
+            {% if logs|length > 0 %}
+                <div class="table-wrap" tabindex="0" aria-label="{{ text.logs.table_aria }}">
+                    <table>
+                        <caption class="visually-hidden">{{ text.captions.logs_table }}</caption>
+                        <thead>
+                        <tr>
+                            <th scope="col">{{ text.table.file }}</th>
+                            <th scope="col">{{ text.table.created_at }}</th>
+                            <th scope="col">{{ text.table.events }}</th>
+                            <th scope="col">{{ text.table.players }}</th>
+                            <th scope="col">{{ text.table.guilds }}</th>
+                            <th scope="col">{{ text.table.actions }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for log in logs %}
+                            <tr>
+                                <td><strong>{{ log.file_name }}</strong></td>
+                                <td>{{ log.created_at }}</td>
+                                <td>{{ log.events|fmt }}</td>
+                                <td>{{ log.players|fmt }}</td>
+                                <td>{{ log.guilds|fmt }}</td>
+                                <td>
+                                    <a class="badge badge-button" href="{{ log.url }}" aria-label="{{ text.logs.open_aria }}">
+                                        {{ text.logs.open }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="muted-text">{{ text.logs.empty }}</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

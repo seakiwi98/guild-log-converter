@@ -1119,3 +1119,34 @@ h1 span[aria-hidden="true"] {
 .share-copy-button span[aria-hidden="true"] {
     margin-right: 0.35em;
 }
+
+/* Main navigation */
+.main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3, 12px);
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: var(--section-gap, 24px);
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid rgba(103, 232, 249, 0.38);
+    border-radius: 999px;
+    background: rgba(13, 22, 48, 0.82);
+    color: #ffffff;
+    font-weight: 850;
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.28), rgba(139, 92, 246, 0.30));
+    border-color: rgba(103, 232, 249, 0.72);
+}

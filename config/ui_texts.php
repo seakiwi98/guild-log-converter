@@ -7,11 +7,18 @@ return array(
         'eyebrow' => '&#x2694;&#xFE0F; Guild Battle Log Converter',
     ),
 
+    'nav' => array(
+        'upload' => '&#x1F4E4; Upload',
+        'logs' => '&#x1F5C2;&#xFE0F; Converted Logs',
+    ),
+
     'hero' => array(
         'upload_title' => '&#x26A1; Upload a guild log and get instant stats',
         'upload_description' => 'Parses kills, deaths, guilds and player statistics. Every kill is counted as 2 points.',
         'shared_title' => '&#x1F4CA; Shared guild log stats',
         'shared_description' => 'This is a saved result page. You can bookmark it or send the link to other people.',
+        'logs_title' => '&#x1F5C2;&#xFE0F; Converted logs',
+        'logs_description' => 'Browse all converted battle logs and open their shareable result pages.',
     ),
 
     'upload' => array(
@@ -47,6 +54,15 @@ return array(
         'close' => 'Close details dialog',
     ),
 
+    'logs' => array(
+        'title' => '&#x1F5C2;&#xFE0F; All converted logs',
+        'description' => 'Every saved conversion appears here with a direct link to its shareable result page.',
+        'empty' => 'No converted logs found yet.',
+        'open' => 'Open result',
+        'open_aria' => 'Open converted log result',
+        'table_aria' => 'Scrollable converted logs table',
+    ),
+
     'sections' => array(
         'players' => '&#x1F9D9; Player Overview',
         'players_hint' => 'Sorted by points, then kills.',
@@ -80,6 +96,13 @@ return array(
     ),
 
     'table' => array(
+        'number' => '#',
+        'file' => 'File',
+        'created_at' => 'Created',
+        'events' => 'Events',
+        'players' => 'Players',
+        'guilds' => 'Guilds',
+        'actions' => 'Actions',
         'player' => 'Player',
         'guild' => 'Guild',
         'kills' => 'Kills',
@@ -89,7 +112,6 @@ return array(
         'unique_players' => 'Unique Players',
         'attacking_guild' => 'Attacking Guild',
         'victim_guild' => 'Victim Guild',
-        'number' => '#',
         'killer' => 'Killer',
         'killer_guild' => 'Killer Guild',
         'victim' => 'Victim',
@@ -110,6 +132,7 @@ return array(
     ),
 
     'captions' => array(
+        'logs_table' => 'All converted logs with links to their result pages',
         'player_table' => 'Player statistics sorted by points, then kills',
         'guild_table' => 'Guild statistics with kills, deaths, points and unique players',
         'matchups_table' => 'Guild matchup statistics showing attacking guilds, victim guilds, kills and points',

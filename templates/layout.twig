@@ -16,11 +16,16 @@
 <a href="#main-content" class="skip-link">{{ text.app.skip_link }}</a>
 
 <div class="page">
+    {% include 'partials/navigation.twig' %}
+
     <header class="hero" role="banner">
         <div class="hero-content">
             <p class="eyebrow">{{ text.app.eyebrow|raw }}</p>
 
-            {% if isSharedResult %}
+            {% if isLogsPage|default(false) %}
+                <h1>{{ text.hero.logs_title|raw }}</h1>
+                <p class="subtle">{{ text.hero.logs_description }}</p>
+            {% elseif isSharedResult %}
                 <h1>{{ text.hero.shared_title|raw }}</h1>
                 <p class="subtle">{{ text.hero.shared_description }}</p>
             {% else %}
@@ -31,7 +36,7 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        {% if not isSharedResult %}
+        {% if not isSharedResult and not isLogsPage|default(false) %}
             {% include 'partials/upload-form.twig' %}
         {% endif %}
 

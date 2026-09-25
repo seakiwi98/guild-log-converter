@@ -6,12 +6,17 @@ Options -Indexes
     RewriteCond %{THE_REQUEST} \s/+results\.php[?\s] [NC]
     RewriteRule ^results\.php$ - [R=404,L]
 
+    RewriteCond %{THE_REQUEST} \s/+logs\.php[?\s] [NC]
+    RewriteRule ^logs\.php$ - [R=404,L]
+
     RewriteCond %{THE_REQUEST} \s/+router\.php[?\s] [NC]
     RewriteRule ^router\.php$ - [R=404,L]
 
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
+
+    RewriteRule ^logs$ logs.php [L,QSA]
 
     RewriteRule ^([a-f0-9]{32,40})$ results.php?id=$1 [L,QSA]
 

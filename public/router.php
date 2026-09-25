@@ -19,10 +19,11 @@ if ($path === null) {
  * Never allow direct access to internal PHP endpoints.
  * Public users should only access:
  * - /
+ * - /logs
  * - /{result-id}
  * - static assets
  */
-if ($path === '/results.php' || $path === '/router.php') {
+if ($path === '/results.php' || $path === '/logs.php' || $path === '/router.php') {
     http_response_code(404);
     exit;
 }
@@ -46,6 +47,11 @@ if ($path !== '/' && is_file($fullPath)) {
 
 if ($path === '/' || $path === '') {
     require __DIR__ . '/index.php';
+    return true;
+}
+
+if ($path === '/logs') {
+    require __DIR__ . '/logs.php';
     return true;
 }
 

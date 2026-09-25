@@ -69,6 +69,49 @@ class ResultRepository
         return $payload;
     }
 
+    public function all()
+    {
+        $items = array();
+        $files = glob($this->directory . DIRECTORY_SEPARATOR . '*.json');
+
+        if (!is_array($files)) {
+            return $items;
+        }
+
+        foreach ($files as $file) {
+            $id = basename($file, '.json');
+
+            if (!$this->isValidId($id)) {
+                continue;
+            }
+
+            $payload = $this->find($id);
+
+            if ($payload === null || !isset($payload['result']['totals'])) {
+                continue;
+            }
+
+            $items[] = array(
+                'id' => $payload['id'],
+                'url' => '/' . rawurlencode($payload['id']),
+                'file_name' => isset($payload['file_name']) ? $payload['file_name'] : 'Uploaded log',
+                'created_at' => isset($payload['created_at']) ? $payload['created_at'] : '',
+                'events' => isset($payload['result']['totals']['events']) ? $payload['result']['totals']['events'] : 0,
+                'players' => isset($payload['result']['totals']['players']) ? $payload['result']['totals']['players'] : 0,
+                'guilds' => isset($payload['result']['totals']['guilds']) ? $payload['result']['totals']['guilds'] : 0,
+            );
+        }
+
+        usort($items, array($this, 'sortNewestFirst'));
+
+        return $items;
+    }
+
+    private function sortNewestFirst($a, $b)
+    {
+        return strcmp($b['created_at'], $a['created_at']);
+    }
+
     private function createId()
     {
         if (function_exists('random_bytes')) {
