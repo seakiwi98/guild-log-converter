@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogConv;
 
-class ResultRepository
+final class ResultRepository
 {
-    private $directory;
+    private string $directory;
 
-    public function __construct($directory)
+    public function __construct(string $directory)
     {
         $this->directory = rtrim($directory, DIRECTORY_SEPARATOR);
 
@@ -15,29 +17,19 @@ class ResultRepository
         }
     }
 
-    public function save(array $result, $fileName)
+    public function save(array $result, string $fileName): ?string
     {
         $id = $this->createId();
 
-        /*
-         * Store in ISO-8601 UTC format. The browser converts it to the viewer's
-         * local timezone for display.
-         */
-        $createdAt = gmdate('Y-m-d\TH:i:s\Z');
-
-        $payload = array(
+        $payload = [
             'id' => $id,
             'file_name' => Security::safeUploadedFileName($fileName),
-            'created_at' => $createdAt,
+            'created_at' => gmdate('Y-m-d\TH:i:s\Z'),
             'result' => $result,
-        );
+        ];
 
+        $json = json_encode($payload, JSON_THROW_ON_ERROR);
         $path = $this->getPath($id);
-        $json = json_encode($payload);
-
-        if ($json === false) {
-            return null;
-        }
 
         if (file_put_contents($path, $json, LOCK_EX) === false) {
             return null;
@@ -48,9 +40,9 @@ class ResultRepository
         return $id;
     }
 
-    public function find($id)
+    public function find(?string $id): ?array
     {
-        if (!$this->isValidId($id)) {
+        if (!Security::isValidResultId($id)) {
             return null;
         }
 
@@ -66,7 +58,11 @@ class ResultRepository
             return null;
         }
 
-        $payload = json_decode($json, true);
+        try {
+            $payload = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            return null;
+        }
 
         if (!is_array($payload) || !isset($payload['result'])) {
             return null;
@@ -75,9 +71,9 @@ class ResultRepository
         return $payload;
     }
 
-    public function all()
+    public function all(): array
     {
-        $items = array();
+        $items = [];
         $files = glob($this->directory . DIRECTORY_SEPARATOR . '*.json');
 
         if (!is_array($files)) {
@@ -87,7 +83,7 @@ class ResultRepository
         foreach ($files as $file) {
             $id = basename($file, '.json');
 
-            if (!$this->isValidId($id)) {
+            if (!Security::isValidResultId($id)) {
                 continue;
             }
 
@@ -97,44 +93,30 @@ class ResultRepository
                 continue;
             }
 
-            $createdAt = isset($payload['created_at']) ? $payload['created_at'] : '';
+            $totals = $payload['result']['totals'];
 
-            $items[] = array(
+            $items[] = [
                 'id' => $payload['id'],
                 'url' => '/' . rawurlencode($payload['id']),
-                'file_name' => isset($payload['file_name']) ? $payload['file_name'] : 'Uploaded log',
-                'created_at' => $createdAt,
-                'events' => isset($payload['result']['totals']['events']) ? $payload['result']['totals']['events'] : 0,
-                'players' => isset($payload['result']['totals']['players']) ? $payload['result']['totals']['players'] : 0,
-                'guilds' => isset($payload['result']['totals']['guilds']) ? $payload['result']['totals']['guilds'] : 0,
-            );
+                'file_name' => $payload['file_name'] ?? 'Uploaded log',
+                'created_at' => $payload['created_at'] ?? '',
+                'events' => $totals['events'] ?? 0,
+                'players' => $totals['players'] ?? 0,
+                'guilds' => $totals['guilds'] ?? 0,
+            ];
         }
 
-        usort($items, array($this, 'sortNewestFirst'));
+        usort($items, static fn (array $a, array $b): int => strcmp($b['created_at'], $a['created_at']));
 
         return $items;
     }
 
-    private function sortNewestFirst($a, $b)
+    private function createId(): string
     {
-        return strcmp($b['created_at'], $a['created_at']);
+        return bin2hex(random_bytes(16));
     }
 
-    private function createId()
-    {
-        if (function_exists('random_bytes')) {
-            return bin2hex(random_bytes(16));
-        }
-
-        return sha1(uniqid('', true) . mt_rand());
-    }
-
-    private function isValidId($id)
-    {
-        return Security::isValidResultId($id);
-    }
-
-    private function getPath($id)
+    private function getPath(string $id): string
     {
         return $this->directory . DIRECTORY_SEPARATOR . $id . '.json';
     }

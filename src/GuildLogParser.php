@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogConv;
 
-class GuildLogParser
+final class GuildLogParser
 {
-    public function parse($content)
+    public function parse(string $content): array
     {
-        $content = str_replace("\r\n", "\n", $content);
-        $content = str_replace("\r", "\n", $content);
-
+        $content = str_replace(["\r\n", "\r"], "\n", $content);
         $lines = explode("\n", $content);
-        $events = array();
+        $events = [];
 
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if ($line === '' || strpos($line, 'Angriffskraft') === false) {
+            if ($line === '' || !str_contains($line, 'Angriffskraft')) {
                 continue;
             }
 
@@ -29,7 +29,7 @@ class GuildLogParser
         return $this->buildStats($events);
     }
 
-    private function parseKillLine($line)
+    private function parseKillLine(string $line): ?array
     {
         $parts = explode('Angriffskraft', $line, 2);
 
@@ -55,41 +55,36 @@ class GuildLogParser
             return null;
         }
 
-        return array(
+        return [
             'killer_guild' => trim($attackerMatches[1]),
             'killer_name' => $this->cleanPlayerName($attackerMatches[2]),
             'killer_level' => (int) $attackerMatches[3],
             'victim_guild' => trim($victimMatches[1]),
             'victim_name' => $this->cleanPlayerName($victimMatches[2]),
             'points' => 2,
-        );
+        ];
     }
 
-    private function cleanPlayerName($name)
+    private function cleanPlayerName(string $name): string
     {
         $name = trim($name);
-        $name = preg_replace('/\s+/', ' ', $name);
+        $name = preg_replace('/\s+/', ' ', $name) ?? $name;
 
-        $prefixes = array(
-            'Verteidiger ',
-            'Der Gildenmeister ',
-        );
-
-        foreach ($prefixes as $prefix) {
-            if (strpos($name, $prefix) === 0) {
+        foreach (['Verteidiger ', 'Der Gildenmeister '] as $prefix) {
+            if (str_starts_with($name, $prefix)) {
                 $name = substr($name, strlen($prefix));
                 break;
             }
         }
 
-        return trim(preg_replace('/\s+/', ' ', $name));
+        return trim(preg_replace('/\s+/', ' ', $name) ?? $name);
     }
 
-    private function buildStats(array $events)
+    private function buildStats(array $events): array
     {
-        $players = array();
-        $guilds = array();
-        $matchups = array();
+        $players = [];
+        $guilds = [];
+        $matchups = [];
 
         foreach ($events as $event) {
             $this->addPlayerStats($players, $event);
@@ -107,50 +102,40 @@ class GuildLogParser
             unset($guilds[$key]['players']);
         }
 
-        usort($players, array($this, 'sortPlayers'));
-        usort($guilds, array($this, 'sortGuilds'));
-        usort($matchups, array($this, 'sortMatchups'));
+        usort($players, [$this, 'sortPlayers']);
+        usort($guilds, [$this, 'sortGuilds']);
+        usort($matchups, [$this, 'sortMatchups']);
 
-        return array(
+        return [
             'events' => $events,
             'players' => $players,
             'guilds' => $guilds,
             'matchups' => $matchups,
-            'totals' => array(
+            'totals' => [
                 'events' => count($events),
                 'players' => count($players),
                 'guilds' => count($guilds),
-            ),
-        );
+            ],
+        ];
     }
 
-    private function addPlayerStats(array &$players, array $event)
+    private function addPlayerStats(array &$players, array $event): void
     {
         $killerKey = $event['killer_guild'] . '|' . $event['killer_name'];
         $victimKey = $event['victim_guild'] . '|' . $event['victim_name'];
 
-        if (!isset($players[$killerKey])) {
-            $players[$killerKey] = $this->emptyPlayerStats($event['killer_name'], $event['killer_guild']);
-        }
-
-        if (!isset($players[$victimKey])) {
-            $players[$victimKey] = $this->emptyPlayerStats($event['victim_name'], $event['victim_guild']);
-        }
+        $players[$killerKey] ??= $this->emptyPlayerStats($event['killer_name'], $event['killer_guild']);
+        $players[$victimKey] ??= $this->emptyPlayerStats($event['victim_name'], $event['victim_guild']);
 
         $players[$killerKey]['kills']++;
         $players[$killerKey]['points'] += $event['points'];
         $players[$victimKey]['deaths']++;
     }
 
-    private function addGuildStats(array &$guilds, array $event)
+    private function addGuildStats(array &$guilds, array $event): void
     {
-        if (!isset($guilds[$event['killer_guild']])) {
-            $guilds[$event['killer_guild']] = $this->emptyGuildStats($event['killer_guild']);
-        }
-
-        if (!isset($guilds[$event['victim_guild']])) {
-            $guilds[$event['victim_guild']] = $this->emptyGuildStats($event['victim_guild']);
-        }
+        $guilds[$event['killer_guild']] ??= $this->emptyGuildStats($event['killer_guild']);
+        $guilds[$event['victim_guild']] ??= $this->emptyGuildStats($event['victim_guild']);
 
         $guilds[$event['killer_guild']]['kills']++;
         $guilds[$event['killer_guild']]['points'] += $event['points'];
@@ -160,49 +145,47 @@ class GuildLogParser
         $guilds[$event['victim_guild']]['players'][$event['victim_name']] = true;
     }
 
-    private function addMatchupStats(array &$matchups, array $event)
+    private function addMatchupStats(array &$matchups, array $event): void
     {
         $matchupKey = $event['killer_guild'] . '|' . $event['victim_guild'];
 
-        if (!isset($matchups[$matchupKey])) {
-            $matchups[$matchupKey] = array(
-                'killer_guild' => $event['killer_guild'],
-                'victim_guild' => $event['victim_guild'],
-                'kills' => 0,
-                'points' => 0,
-            );
-        }
+        $matchups[$matchupKey] ??= [
+            'killer_guild' => $event['killer_guild'],
+            'victim_guild' => $event['victim_guild'],
+            'kills' => 0,
+            'points' => 0,
+        ];
 
         $matchups[$matchupKey]['kills']++;
         $matchups[$matchupKey]['points'] += $event['points'];
     }
 
-    private function emptyPlayerStats($name, $guild)
+    private function emptyPlayerStats(string $name, string $guild): array
     {
-        return array(
+        return [
             'name' => $name,
             'guild' => $guild,
             'kills' => 0,
             'deaths' => 0,
             'kd_ratio' => 0,
             'points' => 0,
-        );
+        ];
     }
 
-    private function emptyGuildStats($name)
+    private function emptyGuildStats(string $name): array
     {
-        return array(
+        return [
             'name' => $name,
             'kills' => 0,
             'deaths' => 0,
             'kd_ratio' => 0,
             'points' => 0,
             'unique_players' => 0,
-            'players' => array(),
-        );
+            'players' => [],
+        ];
     }
 
-    private function ratio($kills, $deaths)
+    private function ratio(int $kills, int $deaths): float|int
     {
         if ($deaths <= 0) {
             return $kills;
@@ -211,34 +194,18 @@ class GuildLogParser
         return round($kills / $deaths, 2);
     }
 
-    private function sortPlayers($a, $b)
+    private function sortPlayers(array $a, array $b): int
     {
-        if ($a['points'] === $b['points']) {
-            if ($a['kills'] === $b['kills']) {
-                return strcmp($a['name'], $b['name']);
-            }
-
-            return $b['kills'] - $a['kills'];
-        }
-
-        return $b['points'] - $a['points'];
+        return [$b['points'], $b['kills'], $a['name']] <=> [$a['points'], $a['kills'], $b['name']];
     }
 
-    private function sortGuilds($a, $b)
+    private function sortGuilds(array $a, array $b): int
     {
-        if ($a['points'] === $b['points']) {
-            return $b['kills'] - $a['kills'];
-        }
-
-        return $b['points'] - $a['points'];
+        return [$b['points'], $b['kills']] <=> [$a['points'], $a['kills']];
     }
 
-    private function sortMatchups($a, $b)
+    private function sortMatchups(array $a, array $b): int
     {
-        if ($a['kills'] === $b['kills']) {
-            return $b['points'] - $a['points'];
-        }
-
-        return $b['kills'] - $a['kills'];
+        return [$b['kills'], $b['points']] <=> [$a['kills'], $a['points']];
     }
 }

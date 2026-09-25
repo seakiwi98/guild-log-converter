@@ -1,41 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogConv;
 
-class ViewRenderer
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
+final class ViewRenderer
 {
-    private $twig;
-    private $text;
+    private Environment $twig;
 
-    public function __construct($templatesDirectory, array $text)
-    {
-        if (class_exists('\Twig\Loader\FilesystemLoader')) {
-            $loaderClass = '\Twig\Loader\FilesystemLoader';
-            $environmentClass = '\Twig\Environment';
-            $filterClass = '\Twig\TwigFilter';
-            $functionClass = '\Twig\TwigFunction';
-        } else {
-            $loaderClass = '\Twig_Loader_Filesystem';
-            $environmentClass = '\Twig_Environment';
-            $filterClass = '\Twig_SimpleFilter';
-            $functionClass = '\Twig_SimpleFunction';
-        }
+    public function __construct(
+        string $templatesDirectory,
+        private readonly array $text
+    ) {
+        $loader = new FilesystemLoader($templatesDirectory);
 
-        $loader = new $loaderClass($templatesDirectory);
-
-        $this->twig = new $environmentClass($loader, array(
+        $this->twig = new Environment($loader, [
             'cache' => false,
             'autoescape' => 'html',
-        ));
+            'strict_variables' => false,
+        ]);
 
-        $this->text = $text;
-
-        $this->twig->addFilter(new $filterClass('fmt', 'fmt'));
-        $this->twig->addFunction(new $functionClass('detail_key', 'detailKey'));
-        $this->twig->addFunction(new $functionClass('guild_detail_key', 'guildDetailKey'));
+        $this->twig->addFilter(new TwigFilter('fmt', 'fmt'));
+        $this->twig->addFunction(new TwigFunction('detail_key', 'detailKey'));
+        $this->twig->addFunction(new TwigFunction('guild_detail_key', 'guildDetailKey'));
     }
 
-    public function render($template, array $data)
+    public function render(string $template, array $data = []): string
     {
         $data['text'] = $this->text;
 

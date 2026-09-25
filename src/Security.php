@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogConv;
 
-class Security
+final class Security
 {
-    public static function sendHeaders()
+    public static function sendHeaders(): void
     {
         header('X-Frame-Options: DENY');
         header('X-Content-Type-Options: nosniff');
@@ -13,10 +15,6 @@ class Security
         header('Cross-Origin-Opener-Policy: same-origin');
         header('Cross-Origin-Resource-Policy: same-origin');
 
-        /*
-         * Keep CDN entries because Bootstrap and Google Fonts are loaded remotely.
-         * If you self-host those assets later, this CSP can be tightened further.
-         */
         header(
             "Content-Security-Policy: " .
             "default-src 'self'; " .
@@ -31,7 +29,7 @@ class Security
         );
     }
 
-    public static function denyDirectAccess()
+    public static function denyDirectAccess(): void
     {
         if (!defined('APP_BOOTSTRAPPED')) {
             http_response_code(404);
@@ -39,24 +37,26 @@ class Security
         }
     }
 
-    public static function requireMethod(array $methods)
+    public static function requireMethod(array $methods): void
     {
-        if (!isset($_SERVER['REQUEST_METHOD']) || !in_array($_SERVER['REQUEST_METHOD'], $methods, true)) {
+        $requestMethod = $_SERVER['REQUEST_METHOD'] ?? '';
+
+        if (!in_array($requestMethod, $methods, true)) {
             http_response_code(405);
             header('Allow: ' . implode(', ', $methods));
             exit;
         }
     }
 
-    public static function isValidResultId($id)
+    public static function isValidResultId(?string $id): bool
     {
-        return is_string($id) && preg_match('/^[a-f0-9]{32,40}$/', $id);
+        return is_string($id) && preg_match('/^[a-f0-9]{32,40}$/', $id) === 1;
     }
 
-    public static function safeUploadedFileName($fileName)
+    public static function safeUploadedFileName(string $fileName): string
     {
-        $fileName = basename((string) $fileName);
-        $fileName = preg_replace('/[^a-zA-Z0-9._ -]/', '_', $fileName);
+        $fileName = basename($fileName);
+        $fileName = preg_replace('/[^a-zA-Z0-9._ -]/', '_', $fileName) ?? '';
 
         if ($fileName === '' || $fileName === '.' || $fileName === '..') {
             return 'uploaded-log.txt';

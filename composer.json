@@ -3,6 +3,7 @@
   "description": "Simple PHP guild log upload and statistics overview",
   "type": "project",
   "require": {
+    "php": ">=8.3",
     "twig/twig": "^3.30"
   },
   "autoload": {
@@ -12,5 +13,9 @@
     "files": [
       "src/helpers.php"
     ]
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true
   }
 }
