@@ -1,4 +1,9 @@
 <nav class="main-nav" aria-label="Main navigation">
-    <a href="/" class="nav-link">{{ text.nav.upload|raw }}</a>
-    <a href="/logs" class="nav-link">{{ text.nav.logs|raw }}</a>
+    <a href="/" class="nav-link{% if not isLogsPage|default(false) and not isSharedResult %} is-active{% endif %}">
+        {{ text.nav.upload|raw }}
+    </a>
+
+    <a href="/logs" class="nav-link{% if isLogsPage|default(false) %} is-active{% endif %}">
+        {{ text.nav.logs|raw }}
+    </a>
 </nav>
