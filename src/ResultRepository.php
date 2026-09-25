@@ -19,10 +19,16 @@ class ResultRepository
     {
         $id = $this->createId();
 
+        /*
+         * Store in ISO-8601 UTC format. The browser converts it to the viewer's
+         * local timezone for display.
+         */
+        $createdAt = gmdate('Y-m-d\TH:i:s\Z');
+
         $payload = array(
             'id' => $id,
             'file_name' => Security::safeUploadedFileName($fileName),
-            'created_at' => date('c'),
+            'created_at' => $createdAt,
             'result' => $result,
         );
 
@@ -91,11 +97,13 @@ class ResultRepository
                 continue;
             }
 
+            $createdAt = isset($payload['created_at']) ? $payload['created_at'] : '';
+
             $items[] = array(
                 'id' => $payload['id'],
                 'url' => '/' . rawurlencode($payload['id']),
                 'file_name' => isset($payload['file_name']) ? $payload['file_name'] : 'Uploaded log',
-                'created_at' => isset($payload['created_at']) ? $payload['created_at'] : '',
+                'created_at' => $createdAt,
                 'events' => isset($payload['result']['totals']['events']) ? $payload['result']['totals']['events'] : 0,
                 'players' => isset($payload['result']['totals']['players']) ? $payload['result']['totals']['players'] : 0,
                 'guilds' => isset($payload['result']['totals']['guilds']) ? $payload['result']['totals']['guilds'] : 0,

@@ -66,6 +66,39 @@
         }
     }
 
+    function padNumber(value) {
+        return value < 10 ? '0' + value : String(value);
+    }
+
+    function formatLocalDateTime(date) {
+        return [
+            padNumber(date.getDate()),
+            padNumber(date.getMonth() + 1),
+            date.getFullYear()
+        ].join('.') + ' ' + [
+            padNumber(date.getHours()),
+            padNumber(date.getMinutes()),
+            padNumber(date.getSeconds())
+        ].join(':');
+    }
+
+    function setupLocalTimes() {
+        var elements = document.querySelectorAll('[data-local-time]');
+
+        for (var i = 0; i < elements.length; i++) {
+            var rawValue = elements[i].getAttribute('datetime') || elements[i].textContent;
+            var date = new Date(rawValue);
+
+            if (isNaN(date.getTime())) {
+                continue;
+            }
+
+            elements[i].textContent = formatLocalDateTime(date);
+            elements[i].setAttribute('title', rawValue);
+        }
+    }
+
     setupDetails();
     setupCopyButtons();
+    setupLocalTimes();
 })();

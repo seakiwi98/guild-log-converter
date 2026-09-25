@@ -51,7 +51,11 @@
                         {% for log in logs %}
                             <tr>
                                 <td><strong>{{ log.file_name }}</strong></td>
-                                <td>{{ log.created_at }}</td>
+                                <td>
+                                    <time datetime="{{ log.created_at }}" data-local-time>
+                                        {{ log.created_at }}
+                                    </time>
+                                </td>
                                 <td>{{ log.events|fmt }}</td>
                                 <td>{{ log.players|fmt }}</td>
                                 <td>{{ log.guilds|fmt }}</td>
