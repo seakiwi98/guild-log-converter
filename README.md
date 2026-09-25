@@ -4,14 +4,16 @@ A PHP and Twig application that parses uploaded guild battle logs and creates sh
 
 ## Requirements
 
-- PHP 5.6 or newer
+- PHP 8.3 or newer
 - Composer
 
 ## Install
 
 Run:
 
+```bash
 composer install
+``` 
 
 ## Run locally
 
