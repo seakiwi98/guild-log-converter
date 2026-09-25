@@ -4,59 +4,59 @@ return array(
     'app' => array(
         'title' => 'Guild Log Overview',
         'skip_link' => 'Skip to main content',
-        'eyebrow' => '&#x2694;&#xFE0F; Guild Battle Log Converter',
+        'eyebrow' => 'Guild Battle Log Converter',
     ),
 
     'nav' => array(
-        'upload' => '&#x1F4E4; Upload',
-        'logs' => '&#x1F5C2;&#xFE0F; Converted Logs',
+        'upload' => 'Upload',
+        'logs' => 'Converted Logs',
     ),
 
     'hero' => array(
-        'upload_title' => '&#x26A1; Upload a guild log and get instant stats',
-        'upload_description' => 'Parses kills, deaths, guilds and player statistics. Every kill is counted as 2 points.',
-        'shared_title' => '&#x1F4CA; Shared guild log stats',
-        'shared_description' => 'This is a saved result page. You can bookmark it or send the link to other people.',
-        'logs_title' => '&#x1F5C2;&#xFE0F; Converted logs',
-        'logs_description' => 'Browse all converted battle logs and open their shareable result pages.',
+        'upload_title' => 'Upload a guild log and review battle statistics',
+        'upload_description' => 'Parse kills, deaths, guilds and player statistics. Every kill is counted as 2 points.',
+        'shared_title' => 'Shared guild log statistics',
+        'shared_description' => 'This saved result page can be bookmarked or shared with others.',
+        'logs_title' => 'Converted logs',
+        'logs_description' => 'Browse saved conversions and open their shareable result pages.',
     ),
 
     'upload' => array(
-        'icon' => '&#x1F4DC;',
-        'title' => '&#x1F50D; Analyze a battle log',
-        'description' => 'Upload your TXT logfile. The page will calculate kills, deaths, K/D, points, guild stats and individual player breakdowns.',
-        'file_title' => '&#x1F4C4; Choose your TXT file',
+        'icon' => '',
+        'title' => 'Analyze a battle log',
+        'description' => 'Upload a TXT log file to calculate kills, deaths, K/D, points, guild statistics and player breakdowns.',
+        'file_title' => 'Choose TXT file',
         'file_help' => 'Accepted format: plain text files ending in .txt.',
-        'button' => '&#x1F680; Analyze Log',
+        'button' => 'Analyze Log',
         'button_aria' => 'Analyze uploaded guild log',
     ),
 
     'share' => array(
-        'eyebrow' => '&#x1F517; Shareable Result',
-        'title' => '&#x1F4E3; Send this page to others',
-        'description' => 'This result has a unique URL. Anyone with the link can view the parsed statistics.',
+        'eyebrow' => 'Shareable Result',
+        'title' => 'Share this result',
+        'description' => 'Anyone with this link can view the parsed statistics.',
         'input_aria' => 'Shareable result URL',
-        'copy_button' => '&#x1F4CB; Copy Link',
+        'copy_button' => 'Copy Link',
     ),
 
     'summary' => array(
         'aria' => 'Upload summary',
-        'events' => '&#x1F525; Total Events',
-        'players' => '&#x1F9D9; Players',
-        'guilds' => '&#x1F6E1;&#xFE0F; Guilds',
-        'file' => '&#x1F4C4; Uploaded File',
+        'events' => 'Total Events',
+        'players' => 'Players',
+        'guilds' => 'Guilds',
+        'file' => 'Uploaded File',
     ),
 
     'modal' => array(
-        'eyebrow' => '&#x1F4CC; Detailed Statistics',
+        'eyebrow' => 'Detailed Statistics',
         'title' => 'Details',
         'description' => 'Detailed statistics for the selected player or guild.',
         'close' => 'Close details dialog',
     ),
 
     'logs' => array(
-        'title' => '&#x1F5C2;&#xFE0F; All converted logs',
-        'description' => 'Every saved conversion appears here with a direct link to its shareable result page.',
+        'title' => 'All converted logs',
+        'description' => 'Every saved conversion appears here with a direct link to its result page.',
         'empty' => 'No converted logs found yet.',
         'open' => 'Open result',
         'open_aria' => 'Open converted log result',
@@ -64,13 +64,13 @@ return array(
     ),
 
     'sections' => array(
-        'players' => '&#x1F9D9; Player Overview',
+        'players' => 'Player Overview',
         'players_hint' => 'Sorted by points, then kills.',
-        'guilds' => '&#x1F6E1;&#xFE0F; Guild Overview',
+        'guilds' => 'Guild Overview',
         'guilds_hint' => 'Aggregated kills, deaths and points per guild.',
-        'matchups' => '&#x2694;&#xFE0F; Guild Matchups',
+        'matchups' => 'Guild Matchups',
         'matchups_hint' => 'Shows how often one guild killed players from another guild.',
-        'events' => '&#x1F525; Parsed Events',
+        'events' => 'Parsed Events',
         'events_hint' => 'Every parsed kill from the uploaded log.',
     ),
 
@@ -146,11 +146,11 @@ return array(
         'no_events' => 'No valid kill entries were found in the uploaded file.',
         'save_failed' => 'The result could not be saved. Please try again.',
         'not_found' => 'This shared result does not exist or is no longer available.',
-        'prefix' => '&#x26A0;&#xFE0F; Error:',
+        'prefix' => 'Error:',
     ),
 
     'js' => array(
-        'copied' => 'Copied!',
-        'select_and_copy' => 'Select and copy',
+        'copied' => 'Copied',
+        'select_and_copy' => 'Select and copy'
     ),
 );
